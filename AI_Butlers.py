@@ -7,12 +7,10 @@
 Introduction: 
 '''
 
-
 #%% Import Packages
 # basic
 from flask import Flask, request
 import argparse
-
 # mine
 import AIButlers
 
@@ -23,7 +21,6 @@ arg_parser.add_argument('-p', '--path', type=str, default="./secret.json", help=
 #%% Flask
 app = Flask(__name__)
 
-
 #%% Functions
 @app.route('/help')
 def help_page():
@@ -32,7 +29,6 @@ def help_page():
 #%% Main Function
 if __name__ == "__main__":
     args = arg_parser.parse_args()
-    AIButlers.read_secret('./secret.json')
-    print()
-    pass
+    secret = AIButlers.read_secret(args.path)
+    print(secret)
     # app.run(host="::", port=1011, debug=True)
