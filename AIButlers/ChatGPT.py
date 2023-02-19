@@ -15,6 +15,7 @@ import openai
 
 # Self-defined
 if __package__ is None:
+    os.chdir(os.path.dirname(__file__))
     sys.path.append('..')
     import AIButlers
 
@@ -24,15 +25,15 @@ def chat_gpt(content, args):
     openai.api_key = args.openai.api_key
     try:
         response = openai.Completion.create(
-            model = "text-davinci-003",
+            model = args.openai.model,
             prompt = content + "\n",
-            temperature = 0.9,
-            max_tokens = 1000,
-            top_p = 1,
-            frequency_penalty = 0.0,
-            presence_penalty = 0.6,
-            stop = ["Human:", "AI:"]
-        )
+            temperature = args.openai.temperature,
+            max_tokens = args.openai.max_tokens,
+            top_p = args.openai.top_p,
+            frequency_penalty = args.openai.frequency_penalty,
+            presence_penalty = args.openai.presence_penalty,
+            stop = args.openai.stop
+        ) 
         reply = response.choices[0].text.strip()
         chat_code = 500
     except:
@@ -43,7 +44,7 @@ def chat_gpt(content, args):
 
 #%% Main Function
 if __name__ == "__main__":
-    secret = AIButlers.read_secret("../secret.json")
+    secret = AIButlers.read_config("../config.json")
     chat_code, reply = chat_gpt("Hello", secret)
     print(f"code: {chat_code}")
     print(reply)

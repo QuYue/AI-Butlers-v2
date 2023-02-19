@@ -6,17 +6,17 @@
 @Software    :Visual Studio Code
 Introduction: 
 '''
-# %% Import Packages
-# basic
+#%% Import Packages
+# Basic
 import json
 
 # Self-defined
 import utils
 
-# %%
-def read_secret(secret_path):
+#%% Functions
+def read_config(config_path):
     secret = utils.MyStruct()
-    with open(secret_path, encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         d = f.read()
         d = json.loads(d)
         secret.add_json(d)
