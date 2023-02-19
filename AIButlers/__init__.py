@@ -12,17 +12,18 @@ import json
 
 # Self-defined
 import utils
+from . import butler
 
 #%% Functions
-def read_config(config_path):
-    secret = utils.MyStruct()
-    with open(config_path, encoding="utf-8") as f:
+def read_config(config):
+    new_config = utils.MyStruct()
+    with open(config.path, encoding="utf-8") as f:
         d = f.read()
         d = json.loads(d)
-        secret.add_json(d)
-    return secret
+        new_config.add_json(d)
+    return new_config
 
-def get_map(secret_path):
+def get_map(config_path):
     map = utils.MyStruct()
     map.robot = utils.MyStruct()
     map.user = utils.MyStruct()

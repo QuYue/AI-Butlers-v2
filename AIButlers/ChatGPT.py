@@ -21,18 +21,18 @@ if __package__ is None:
 
 
 #%% Functions
-def chat_gpt(content, args):
-    openai.api_key = args.openai.api_key
+def chat_gpt(content, config):
+    openai.api_key = config.openai.api_key
     try:
         response = openai.Completion.create(
-            model = args.openai.model,
+            model = config.openai.model,
             prompt = content + "\n",
-            temperature = args.openai.temperature,
-            max_tokens = args.openai.max_tokens,
-            top_p = args.openai.top_p,
-            frequency_penalty = args.openai.frequency_penalty,
-            presence_penalty = args.openai.presence_penalty,
-            stop = args.openai.stop
+            temperature = config.openai.temperature,
+            max_tokens = config.openai.max_tokens,
+            top_p = config.openai.top_p,
+            frequency_penalty = config.openai.frequency_penalty,
+            presence_penalty = config.openai.presence_penalty,
+            stop = config.openai.stop
         ) 
         reply = response.choices[0].text.strip()
         chat_code = 500
@@ -44,7 +44,7 @@ def chat_gpt(content, args):
 
 #%% Main Function
 if __name__ == "__main__":
-    secret = AIButlers.read_config("../config.json")
-    chat_code, reply = chat_gpt("Hello", secret)
+    config = AIButlers.read_config("../config.json")
+    chat_code, reply = chat_gpt("Hello", config)
     print(f"code: {chat_code}")
     print(reply)

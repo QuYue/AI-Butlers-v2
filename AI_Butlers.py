@@ -31,7 +31,7 @@ def help_page():
 @app.route('/', methods=['POST'])
 def interactive():
     received_message = request.json
-    utils.print(received_message, args)
+    utils.print(received_message, config)
 
     sender_name = received_message["senderNick"]
     senderid = received_message["senderStaffId"] 
@@ -39,10 +39,17 @@ def interactive():
     robotcode = received_message["robotCode"]
     print(f"{sender_name}: {content}")
 
+    butler.implement(received_message, config)
+
+
+    
+
     return "OK"
 
 #%% Main Function
 if __name__ == "__main__":
     args = arg_parser.parse_args()
-    args = AIButlers.read_config(args.path)
+
+    config = AIButlers.read_config(args)
+    butler = AIButlers.butler.Butler("Alfred", config)
     app.run(host="::", port=1011, debug=True)

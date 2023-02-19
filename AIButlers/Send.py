@@ -63,15 +63,15 @@ class Sender():
         return access_token   
 
     @staticmethod
-    def send_message(user_id, content, config) -> None:
+    def send_message(user_id, message, config) -> None:
         client = Sender.create_client("robot")
         batch_send_otoheaders = dingtalkrobot__1__0_models.BatchSendOTOHeaders()
         batch_send_otoheaders.x_acs_dingtalk_access_token = Sender.get_access_token(config)
         batch_send_otorequest = dingtalkrobot__1__0_models.BatchSendOTORequest(
             robot_code=config.dingtalk.robots.dict["Alfred"].robotCode,
             user_ids=[user_id],
-            msg_key=content.msg_key,
-            msg_param=content.msg_param
+            msg_key=message.msg_key,
+            msg_param=message.msg_param
         )
         # try:
         client.batch_send_otowith_options(batch_send_otorequest, batch_send_otoheaders, util_models.RuntimeOptions())
@@ -81,13 +81,13 @@ class Sender():
         #         pass
 
     @staticmethod
-    def send_group_message(content, config) -> None:
+    def send_group_message(message, config) -> None:
         client = Sender.create_client("robot")
         org_group_send_headers = dingtalkrobot__1__0_models.OrgGroupSendHeaders()
         org_group_send_headers.x_acs_dingtalk_access_token = Sender.get_access_token(config)
         org_group_send_request = dingtalkrobot__1__0_models.OrgGroupSendRequest(
-            msg_param=content.msg_param,
-            msg_key=content.msg_key,
+            msg_param=message.msg_param,
+            msg_key=message.msg_key,
             robot_code=config.dingtalk.robots.dict["Alfred"].robotCode,
             open_conversation_id=config.dingtalk.openConversationId
         )
@@ -102,7 +102,7 @@ class Sender():
 if __name__ == '__main__':
     config = AIButlers.read_config("../config.json")
     user_id = "manager1393"
-    content = utils.MyStruct()
-    content.msg_key = "sampleMarkdown"
-    content.msg_param ='{"text": "hello text1", "title": "hello title"}'
-    Sender.send_message(user_id, content, config)
+    message = utils.MyStruct()
+    message.msg_key = "sampleText"
+    message.msg_param ='{"content": "11111"}'
+    Sender.send_message(user_id, message, config)

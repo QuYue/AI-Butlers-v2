@@ -42,6 +42,6 @@ class MyStruct():
         return f"{self.__dict__}"
 
 
-def print(string, args):
-    if not args.noprint:
+def print(string, config):
+    if not config.noprint:
         pprint(string)
