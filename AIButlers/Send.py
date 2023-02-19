@@ -81,7 +81,7 @@ class Sender():
         #         pass
 
     @staticmethod
-    def send_group_message(message, config) -> None:
+    def send_group_message(conversation_id, message, config) -> None:
         client = Sender.create_client("robot")
         org_group_send_headers = dingtalkrobot__1__0_models.OrgGroupSendHeaders()
         org_group_send_headers.x_acs_dingtalk_access_token = Sender.get_access_token(config)
@@ -89,7 +89,7 @@ class Sender():
             msg_param=message.msg_param,
             msg_key=message.msg_key,
             robot_code=config.dingtalk.robots.dict["Alfred"].robotCode,
-            open_conversation_id=config.dingtalk.openConversationId
+            open_conversation_id=conversation_id
         )
         try:
             client.org_group_send_with_options(org_group_send_request, org_group_send_headers, util_models.RuntimeOptions())
@@ -101,8 +101,9 @@ class Sender():
 # %%
 if __name__ == '__main__':
     config = AIButlers.read_config("../config.json")
-    user_id = "manager1393"
+    # user_id = "manager1393"
+    user_id = "091228533436436277"
     message = utils.MyStruct()
     message.msg_key = "sampleText"
-    message.msg_param ='{"content": "11111"}'
+    message.msg_param ='{"content": "你好！"}'
     Sender.send_message(user_id, message, config)

@@ -15,9 +15,9 @@ import utils
 from . import butler
 
 #%% Functions
-def read_config(config):
+def read_config(path):
     new_config = utils.MyStruct()
-    with open(config.path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         d = f.read()
         d = json.loads(d)
         new_config.add_json(d)

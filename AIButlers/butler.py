@@ -37,12 +37,17 @@ class Butler():
     
     def implement(self, received_message, config):
         user_id = received_message["senderStaffId"] 
+        conversation_id = received_message["conversationId"] 
         content = received_message["text"]["content"]
 
         chat_code, reply = ChatGPT.chat_gpt(content, config)
-        utils.print(f"ChatGPT: {reply}", config)
+        print(f"ChatGPT: {reply}")
         reply = self.text_response(reply)
-        Send.Sender.send_message(user_id, reply, config)
+
+        if 'atUsers' not in received_message:
+            Send.Sender.send_message(user_id, reply, config)
+        else:
+            Send.Sender.send_group_message(conversation_id, reply, config)
 
 
 
