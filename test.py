@@ -98,4 +98,3 @@ if __name__ == '__main__':
     import AIButlers
     secret = AIButlers.read_secret("./secret.json")
     d = Sample.send_message(secret)
-    print(Sample.get_access_token(secret))

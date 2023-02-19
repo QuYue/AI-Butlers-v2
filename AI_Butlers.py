@@ -26,9 +26,12 @@ app = Flask(__name__)
 def help_page():
     return "Hello World"
 
+@app.route('/', methods=['POST'])
+def register():
+    return 'OK'
+
 #%% Main Function
 if __name__ == "__main__":
     args = arg_parser.parse_args()
     secret = AIButlers.read_secret(args.path)
-    print(secret)
-    # app.run(host="::", port=1011, debug=True)
+    app.run(host="::", port=1011, debug=True)
