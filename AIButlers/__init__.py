@@ -10,7 +10,7 @@ Introduction:
 # basic
 import json
 
-# mine
+# Self-defined
 import utils
 
 # %%
@@ -21,6 +21,17 @@ def read_secret(secret_path):
         d = json.loads(d)
         secret.add_json(d)
     return secret
+
+def get_map(secret_path):
+    map = utils.MyStruct()
+    map.robot = utils.MyStruct()
+    map.user = utils.MyStruct()
+
+    map.robot.name2code = dict()
+    map.robot.code2name = dict()
+
+    map.user.name2id = dict()
+    map.user.name2id = dict()
 
 
         

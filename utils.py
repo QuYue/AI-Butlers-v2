@@ -10,6 +10,9 @@ Introduction:
 # %% Import Packages
 import copy
 
+# %% Rename print
+pprint = print
+
 # %% My Structure (Classes)
 class MyStruct():
     """
@@ -37,3 +40,8 @@ class MyStruct():
         Print
         """
         return f"{self.__dict__}"
+
+
+def print(string, args):
+    if not args.noprint:
+        pprint(string)
