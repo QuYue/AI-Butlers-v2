@@ -41,7 +41,7 @@ class Butler():
         content = received_message["text"]["content"]
 
         chat_code, reply = ChatGPT.chat_gpt(content, config)
-        print(f"ChatGPT: {reply}")
+        # print(f"ChatGPT: {reply}")
         reply = self.text_response(reply)
 
         if 'atUsers' not in received_message:

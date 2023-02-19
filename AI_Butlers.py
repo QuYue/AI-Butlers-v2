@@ -37,7 +37,7 @@ def interactive():
     senderid = received_message["senderStaffId"] 
     content = received_message["text"]["content"]
     robotcode = received_message["robotCode"]
-    print(f"{sender_name}: {content}")
+    # print(f"{sender_name}: {content}")
 
     butler.implement(received_message, config)
 

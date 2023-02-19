@@ -1,0 +1,13 @@
+[Unit]
+Description = AI-Butlers-v2
+After = network.target
+
+[Service]
+Type = simple
+User = root
+Restart = on-failure
+RestartSec = 5s
+ExecStart = /bin/bash /root/Files/AI-Butlers-v2/AI_Butlers.sh
+
+[Install]
+WantedBy = multi-user.target
