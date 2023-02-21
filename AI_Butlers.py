@@ -39,11 +39,7 @@ def interactive():
     robotcode = received_message["robotCode"]
     # print(f"{sender_name}: {content}")
 
-    butler.implement(received_message, config)
-
-
-    
-
+    butler.implement(received_message, config)    
     return "OK"
 
 #%% Main Function

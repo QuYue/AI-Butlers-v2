@@ -22,9 +22,10 @@ if __package__ is None:
 else:
     from . import ChatGPT
     from . import Send
+    from . import BaiduTranslate
 
 
-#%% Import Packages
+#%% Functions
 class Butler():
     def __init__(self, name, config):
         self.name = name
@@ -39,8 +40,10 @@ class Butler():
         user_id = received_message["senderStaffId"] 
         conversation_id = received_message["conversationId"] 
         content = received_message["text"]["content"]
-
-        chat_code, reply = ChatGPT.chat_gpt(content, config)
+        if content[:5].strip() == "百度翻译":
+            reply = BaiduTranslate.baidu_translater(content[5:], config)
+        else:
+            chat_code, reply = ChatGPT.chat_gpt(content, config)
         # print(f"ChatGPT: {reply}")
         reply = self.text_response(reply)
 
