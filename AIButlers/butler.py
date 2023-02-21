@@ -10,6 +10,7 @@ Introduction:
 # Basic
 import os
 import sys
+from datetime import datetime
 
 # Self-defined
 import utils
@@ -30,6 +31,19 @@ class Butler():
     def __init__(self, name, config):
         self.name = name
         self.sender = Send.Sender(name, config)
+        self.config = config
+        self.memory = int(config.openai.memory)
+        self.init_conversation()
+
+
+    def init_conversation(self):
+        self.conversation_history = self.config.openai.init_words
+        self.last_active_time = datetime.now() # last time of active
+
+    def if_restart_conversation(self):
+        minutes = (datetime.now() - self.last_active_time).seconds/60
+        if minutes > self.memory:
+            self.init_conversation()
         
     def text_response(self, reply):
         message = utils.MyStruct()
@@ -39,15 +53,23 @@ class Butler():
     
     def implement(self, received_message, config):
         user_id = received_message["senderStaffId"] 
+        user_cname = self.config.map.user.id2cname[user_id]
         conversation_id = received_message["conversationId"] 
         content = received_message["text"]["content"].strip()
+
         if content[:5].strip() == "百度翻译":
             reply = BaiduTranslate.baidu_translater(content[5:], config)
         else:
-            chat_code, reply = ChatGPT.chat_gpt(content, config)
+            self.if_restart_conversation()
+            conversation = f"{self.conversation_history}\n{user_cname}: {content}\n{self.name}:"
+            chat_code, reply = ChatGPT.chat_gpt(conversation, config)
+            if chat_code == 500:
+                self.conversation_history += f"\n{user_cname}: {content}\n{self.name}: {reply}"
+                # print(self.conversation_history)
+            self.last_active_time = datetime.now()
         # print(f"ChatGPT: {reply}")
-        reply = self.text_response(reply)
 
+        reply = self.text_response(reply)
         if 'atUsers' not in received_message:
             self.sender.send_message(user_id, reply)
         else:

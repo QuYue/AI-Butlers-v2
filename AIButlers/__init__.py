@@ -16,10 +16,10 @@ import json
 if __package__ is None:
     os.chdir(os.path.dirname(__file__))
     sys.path.append('..')
-
+else:
 # Self-defined
+    from . import butler
 import utils
-# from . import butler
 
 #%% Functions
 def read_config(path):
@@ -28,6 +28,8 @@ def read_config(path):
         d = f.read()
         d = json.loads(d)
         config.add_json(d)
+
+    get_map(config)
     return config
 
 def get_map(config):
@@ -62,7 +64,6 @@ def get_map(config):
 #%% Main Function
 if __name__ == "__main__":
     config = read_config("../config.json")
-    get_map(config)
     print(config.map.user.id2cname['manager1393'])
         
 

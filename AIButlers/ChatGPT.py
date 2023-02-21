@@ -59,3 +59,4 @@ if __name__ == "__main__":
         # print(f"code: {chat_code}")
         print(f"Alfred: {reply}")
         conversation_history += f"{name}: {user_input}\nAlfred: {reply}"
+    
