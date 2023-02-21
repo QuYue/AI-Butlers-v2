@@ -116,5 +116,5 @@ def baidu_translater(word, config, toLang='zh'):
 #%%
 if __name__ == "__main__":
     config = AIButlers.read_config("../config.json")
-    a = BaiduTranslate("Hello", config)
+    a = baidu_translater("Hello", config)
     print(a)
