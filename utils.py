@@ -45,3 +45,13 @@ class MyStruct():
 def print(string, config):
     if not config.noprint:
         pprint(string)
+
+
+#%%
+if __name__ == "__main__":
+    new_config = MyStruct()
+    import json
+    with open('./config.json', encoding="utf-8") as f:
+        d = f.read()
+        d = json.loads(d)
+        new_config.add_json(d)

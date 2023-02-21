@@ -29,6 +29,7 @@ else:
 class Butler():
     def __init__(self, name, config):
         self.name = name
+        self.sender = Send.Sender(name, config)
         
     def text_response(self, reply):
         message = utils.MyStruct()
@@ -39,7 +40,7 @@ class Butler():
     def implement(self, received_message, config):
         user_id = received_message["senderStaffId"] 
         conversation_id = received_message["conversationId"] 
-        content = received_message["text"]["content"]
+        content = received_message["text"]["content"].strip()
         if content[:5].strip() == "百度翻译":
             reply = BaiduTranslate.baidu_translater(content[5:], config)
         else:
@@ -48,9 +49,9 @@ class Butler():
         reply = self.text_response(reply)
 
         if 'atUsers' not in received_message:
-            Send.Sender.send_message(user_id, reply, config)
+            self.sender.send_message(user_id, reply)
         else:
-            Send.Sender.send_group_message(conversation_id, reply, config)
+            self.sender.send_group_message(conversation_id, reply)
 
 
 

@@ -45,6 +45,17 @@ def chat_gpt(content, config):
 #%% Main Function
 if __name__ == "__main__":
     config = AIButlers.read_config("../config.json")
-    chat_code, reply = chat_gpt("Hello", config)
-    print(f"code: {chat_code}")
-    print(reply)
+    conversation_history = config.openai.init_words
+    print(conversation_history)
+    while True:
+        user_choose = input("选择用户 1. 曲岳 2. 邵明明: ")
+        if user_choose=="1":
+            name = "曲岳"
+        else:
+            name = "邵明明"
+        user_input = input(f"{name}: ")
+        prompt = f"{conversation_history} {name}: {user_input}\nAlfred:"
+        chat_code, reply = chat_gpt(prompt, config)
+        # print(f"code: {chat_code}")
+        print(f"Alfred: {reply}")
+        conversation_history += f"{name}: {user_input}\nAlfred: {reply}"

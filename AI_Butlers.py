@@ -38,14 +38,13 @@ def interactive():
     content = received_message["text"]["content"]
     robotcode = received_message["robotCode"]
     # print(f"{sender_name}: {content}")
-
+    
     butler.implement(received_message, config)    
     return "OK"
 
 #%% Main Function
 if __name__ == "__main__":
     args = arg_parser.parse_args()
-
     config = AIButlers.read_config(args.path)
     butler = AIButlers.butler.Butler("Alfred", config)
     app.run(host="::", port=1011, debug=True)
