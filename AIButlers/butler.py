@@ -24,6 +24,7 @@ else:
     from . import ChatGPT
     from . import Send
     from . import BaiduTranslate
+    from . import Weather
 
 
 #%% Functions
@@ -38,6 +39,11 @@ class Butler():
 
     def init_conversation(self):
         self.conversation_history = self.config.openai.init_words
+        forecast_weather = Weather.forecast_weather_text(Weather.get_forecast_weather(self.config))
+        live_weather = Weather.lives_weather_text(Weather.get_lives_weather(self.config))
+        self.conversation_history += live_weather
+        self.conversation_history += forecast_weather
+        # self.conversation_history = ""
         self.last_active_time = datetime.now() # last time of active
 
     def if_restart_conversation(self):
@@ -50,6 +56,13 @@ class Butler():
         message.msg_key = "sampleText"
         message.msg_param =f'{{"content": "{reply}"}}'
         return message
+
+    def markdown_response(self, reply):
+        message = utils.MyStruct()
+        message.msg_key = "sampleMarkdown"
+        message.msg_param =f'{{"title": "{11}", "text": "{reply}"}}'
+        return message
+
     
     def implement(self, received_message, config):
         user_id = received_message["senderStaffId"] 
@@ -59,17 +72,25 @@ class Butler():
 
         if content[:5].strip() == "百度翻译":
             reply = BaiduTranslate.baidu_translater(content[5:], config)
+            reply = self.text_response(reply)
+        elif content in ["天气", "今日天气", "本日天气", "当天天气", "weather", "Weather", "天气预报"]:
+            reply = Weather.forecast_weather_markdown(Weather.get_forecast_weather(config)) 
+            reply = self.markdown_response(reply)
+        elif content in ["实时天气", "实况天气", "当前天气"]:
+            reply = Weather.lives_weather_markdown(Weather.get_lives_weather(config)) 
+            reply = self.markdown_response(reply)
+        
         else:
             self.if_restart_conversation()
             conversation = f"{self.conversation_history}\n{user_cname}: {content}\n{self.name}:"
             chat_code, reply = ChatGPT.chat_gpt(conversation, config)
             if chat_code == 500:
                 self.conversation_history += f"\n{user_cname}: {content}\n{self.name}: {reply}"
-                # print(self.conversation_history)
             self.last_active_time = datetime.now()
-        # print(f"ChatGPT: {reply}")
+            reply = self.text_response(reply)
+        # print(f"Alfred: {reply}")
 
-        reply = self.text_response(reply)
+        
         if 'atUsers' not in received_message:
             self.sender.send_message(user_id, reply)
         else:

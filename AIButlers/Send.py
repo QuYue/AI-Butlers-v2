@@ -71,7 +71,7 @@ class Sender():
         except Exception as err:
             if times >= self.get_access_token_max_time:
                 self.access_token = None
-                utils.print("Get access token failed", self.onfig)
+                utils.print("Get access token failed", self.config)
             else: 
                 self.get_access_token(times+1)
 
