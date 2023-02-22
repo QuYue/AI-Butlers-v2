@@ -57,10 +57,10 @@ class Butler():
         message.msg_param =f'{{"content": "{reply}"}}'
         return message
 
-    def markdown_response(self, reply):
+    def markdown_response(self, reply, title="消息"):
         message = utils.MyStruct()
         message.msg_key = "sampleMarkdown"
-        message.msg_param =f'{{"title": "{11}", "text": "{reply}"}}'
+        message.msg_param =f'{{"title": "{title}", "text": "{reply}"}}'
         return message
 
     
@@ -75,11 +75,13 @@ class Butler():
             reply = self.text_response(reply)
         elif content in ["天气", "今日天气", "本日天气", "当天天气", "weather", "Weather", "天气预报"]:
             reply = Weather.forecast_weather_markdown(Weather.get_forecast_weather(config)) 
-            reply = self.markdown_response(reply)
+            reply = self.markdown_response(reply, title="天气")
         elif content in ["实时天气", "实况天气", "当前天气"]:
             reply = Weather.lives_weather_markdown(Weather.get_lives_weather(config)) 
-            reply = self.markdown_response(reply)
-        
+            reply = self.markdown_response(reply, title="实时天气")
+        elif content in ["clear", "清空", "清空对话", "对话清空"]:
+            self.init_conversation()
+            reply = self.text_response("对话已清空")
         else:
             self.if_restart_conversation()
             conversation = f"{self.conversation_history}\n{user_cname}: {content}\n{self.name}:"

@@ -64,27 +64,21 @@ class Sender():
             app_secret=self.app_secret
         )
         try:
-            utils.print(f"Get access token times: {times}", self.config)
             d = client.get_access_token(get_access_token_request)
             self.access_token = d.body.access_token
             utils.print("Get access token successed", self.config)
         except Exception as err:
             if times >= self.get_access_token_max_time:
                 self.access_token = None
-                utils.print("Get access token failed", self.config)
             else: 
                 self.get_access_token(times+1)
-
         finish = time.time()
-        utils.print(f"Get_access_token used: {finish-start}s", self.config)
 
     def send_message(self, user_id, message, times=1):
         start = time.time()
         client = self.create_client("robot")
         if self.access_token is None:
-            utils.print(1111111, self.config)
             self.get_access_token()
-        utils.print(f"22222{self.access_token}", self.config)
         batch_send_otoheaders = dingtalkrobot__1__0_models.BatchSendOTOHeaders()
         batch_send_otoheaders.x_acs_dingtalk_access_token = self.access_token
         batch_send_otorequest = dingtalkrobot__1__0_models.BatchSendOTORequest(
@@ -94,7 +88,6 @@ class Sender():
             msg_param=message.msg_param
         )
         try:
-            utils.print(f"Send {times}", self.config)
             client.batch_send_otowith_options(batch_send_otorequest, batch_send_otoheaders, util_models.RuntimeOptions())
         except Exception as err:
             if times >= self.send_message_max_time:
@@ -103,15 +96,12 @@ class Sender():
                 self.get_access_token()
                 self.send_message(user_id, message, times+1)
         finish = time.time()
-        utils.print(f"send_message {finish-start}s", self.config)
 
     def send_group_message(self, conversation_id, message, times=1) -> None:
         start = time.time()
         client = self.create_client("robot")
         if self.access_token is None:
-            utils.print(1111111, self.config)
             self.get_access_token(1)
-        utils.print(f"22222{self.access_token}", self.config)
         org_group_send_headers = dingtalkrobot__1__0_models.OrgGroupSendHeaders()
         org_group_send_headers.x_acs_dingtalk_access_token = self.access_token
         org_group_send_request = dingtalkrobot__1__0_models.OrgGroupSendRequest(
@@ -121,7 +111,6 @@ class Sender():
             open_conversation_id=conversation_id
         )
         try:
-            utils.print(f"Send group {times}", self.config)
             client.org_group_send_with_options(org_group_send_request, org_group_send_headers, util_models.RuntimeOptions())
         except Exception as err:
             if times >= self.send_message_max_time:
@@ -130,7 +119,6 @@ class Sender():
                 self.get_access_token()
                 self.send_group_message(conversation_id, message, times+1)
         finish = time.time()
-        utils.print(f"send_group_message {finish-start}s", self.config)
 
 
 # %%
