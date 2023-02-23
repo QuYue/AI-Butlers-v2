@@ -78,13 +78,14 @@ def lives_weather_text(weather):
     text += f"湿度: {w['humidity_float']}%。"
     return text
 
-def forecast_weather_markdown(weather):
+def forecast_weather_markdown(weather, iftomorrow=True):
     w0 = weather['forecasts'][0]['casts'][0]
     w1 = weather['forecasts'][0]['casts'][1]
     today = datetime.strptime(w0['date'],"%Y-%m-%d")
     tomorrow = datetime.strptime(w1['date'],"%Y-%m-%d")
     text = f"#### **{weather['forecasts'][0]['city']}** 今日天气 \n\n"
-    text += f"{today.strftime('%Y年%m月%d日')}\n\n"
+    if iftomorrow:
+        text += f"{today.strftime('%Y年%m月%d日')}\n\n"
     text += f"白天天气: {w0['dayweather']}\n\n"
     text += f"白天温度: {w0['daytemp']}°C\n\n"
     text += f"白天风力: {w0['daypower']}\n\n"
@@ -93,16 +94,17 @@ def forecast_weather_markdown(weather):
     text += f"夜间温度: {w0['nighttemp']}°C\n\n"
     text += f"夜间风力: {w0['nightpower']}\n\n"
     text += f"夜间风向: {w0['nightwind']}\n\n"
-    text += f"#### **{weather['forecasts'][0]['city']}** 明日天气\n\n"
-    text += f"{tomorrow.strftime('%Y年%m月%d日')}\n\n"
-    text += f"白天天气: {w1['dayweather']}\n\n"
-    text += f"白天温度: {w1['daytemp']}°C\n\n"
-    text += f"白天风力: {w1['daypower']}\n\n"
-    text += f"白天风向: {w1['daywind']}\n\n"
-    text += f"夜间天气: {w1['nightweather']}\n\n"
-    text += f"夜间温度: {w1['nighttemp']}°C\n\n"
-    text += f"夜间风力: {w1['nightpower']}\n\n"
-    text += f"夜间风向: {w1['nightwind']}\n\n"
+    if iftomorrow:
+        text += f"#### **{weather['forecasts'][0]['city']}** 明日天气\n\n"
+        text += f"{tomorrow.strftime('%Y年%m月%d日')}\n\n"
+        text += f"白天天气: {w1['dayweather']}\n\n"
+        text += f"白天温度: {w1['daytemp']}°C\n\n"
+        text += f"白天风力: {w1['daypower']}\n\n"
+        text += f"白天风向: {w1['daywind']}\n\n"
+        text += f"夜间天气: {w1['nightweather']}\n\n"
+        text += f"夜间温度: {w1['nighttemp']}°C\n\n"
+        text += f"夜间风力: {w1['nightpower']}\n\n"
+        text += f"夜间风向: {w1['nightwind']}\n\n"
     return text
 
 def forecast_weather_text(weather):

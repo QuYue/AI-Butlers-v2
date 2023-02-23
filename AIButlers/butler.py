@@ -25,6 +25,8 @@ else:
     from . import Send
     from . import BaiduTranslate
     from . import Weather
+    from . import Schedule
+    from . import GoodMorning
 
 
 #%% Functions
@@ -35,6 +37,12 @@ class Butler():
         self.config = config
         self.memory = int(config.openai.memory)
         self.init_conversation()
+        self.tasker = Schedule.ScheduleTasker()
+        self.run_tasker()
+
+    def run_tasker(self):
+        self.tasker.run()
+        GoodMorning.set_good_morning(self.tasker, self.markdown_response, self.sender, self.config)
 
 
     def init_conversation(self):
