@@ -46,10 +46,6 @@ def set_good_morning(tasker, markdown_response, sender, config):
 
 
 
-
-
-
-
     
 
 #%% Main Function

@@ -61,7 +61,7 @@ class ScheduleTasker():
             # schedule
             schedule.run_pending()
             time.sleep(self.refresh)
-            print(datetime.datetime.now())
+            # print(datetime.datetime.now())
 
     def run(self):
         self.run_threaded(self.__run__)

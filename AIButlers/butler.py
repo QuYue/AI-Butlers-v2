@@ -26,7 +26,7 @@ else:
     from . import BaiduTranslate
     from . import Weather
     from . import Schedule
-    from . import GoodMorning
+    from . import Alarm
 
 
 #%% Functions
@@ -42,7 +42,7 @@ class Butler():
 
     def run_tasker(self):
         self.tasker.run()
-        GoodMorning.set_good_morning(self.tasker, self.markdown_response, self.sender, self.config)
+        Alarm.set_good_morning(self.tasker, self.markdown_response, self.sender, self.config)
 
 
     def init_conversation(self):
