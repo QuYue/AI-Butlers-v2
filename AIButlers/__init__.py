@@ -16,9 +16,8 @@ import json
 if __package__ is None:
     os.chdir(os.path.dirname(__file__))
     sys.path.append('..')
-else:
 # Self-defined
-    from . import butler
+from .Butler import Butler
 import utils
 
 #%% Functions

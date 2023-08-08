@@ -19,9 +19,11 @@ if __package__ is None:
     sys.path.append('..')
     import AIButlers
     import ChatGPT
+    import ChatGPT3
     import Send
 else:
     from . import ChatGPT
+    from . import ChatGPT3
     from . import Send
     from . import BaiduTranslate
     from . import Weather
@@ -37,6 +39,7 @@ class Butler():
         self.config = config
         self.memory = int(config.openai.memory)
         self.init_conversation()
+        self.init_conversation_gpt3()
         self.tasker = Schedule.ScheduleTasker()
         self.run_tasker()
 
@@ -54,10 +57,23 @@ class Butler():
         # self.conversation_history = ""
         self.last_active_time = datetime.now() # last time of active
 
+    def init_conversation_gpt3(self):
+        self.conversation3_history = []
+        forecast_weather = Weather.forecast_weather_text(Weather.get_forecast_weather(self.config))
+        live_weather = Weather.lives_weather_text(Weather.get_lives_weather(self.config))
+        self.conversation3_history.append({"role": "system", "content":live_weather})
+        self.conversation3_history.append({"role": "system", "content":forecast_weather})
+        self.last_active_time = datetime.now() # last time of active
+
     def if_restart_conversation(self):
         minutes = (datetime.now() - self.last_active_time).seconds/60
         if minutes > self.memory:
             self.init_conversation()
+    
+    def if_restart_conversation3(self):
+        minutes = (datetime.now() - self.last_active_time).seconds/60
+        if minutes > self.memory:
+            self.init_conversation_gpt3()
         
     def text_response(self, reply):
         message = utils.MyStruct()
@@ -91,26 +107,23 @@ class Butler():
             self.init_conversation()
             reply = self.text_response("对话已清空")
         else:
-            self.if_restart_conversation()
-            conversation = f"{self.conversation_history}\n{user_cname}: {content}\n{self.name}:"
-            chat_code, reply = ChatGPT.chat_gpt(conversation, config)
+            # self.if_restart_conversation()
+            # conversation = f"{self.conversation_history}\n{user_cname}: {content}\n{self.name}:"
+            # chat_code, reply = ChatGPT.chat_gpt(conversation, config)
+            # if chat_code == 500:
+            #     self.conversation_history += f"\n{user_cname}: {content}\n{self.name}: {reply}"
+            # self.last_active_time = datetime.now()
+            # reply = self.text_response(reply)
+            self.if_restart_conversation3()
+            self.conversation3_history.append({"role": "user", "content":f"{user_cname}: {content}"})
+            chat_code, reply = ChatGPT3.chat_gpt3(self.conversation3_history, config)
             if chat_code == 500:
-                self.conversation_history += f"\n{user_cname}: {content}\n{self.name}: {reply}"
+                self.conversation3_history.append({"role": "assistant", "content":f"{self.name}: {reply}"})
             self.last_active_time = datetime.now()
             reply = self.text_response(reply)
-        # print(f"Alfred: {reply}")
-
         
+        print(f"{self.name} : {reply}")
         if 'atUsers' not in received_message:
             self.sender.send_message(user_id, reply)
         else:
             self.sender.send_group_message(conversation_id, reply)
-
-
-
-
-
-
-
-
-    

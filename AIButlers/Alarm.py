@@ -29,6 +29,7 @@ else:
 #%% Classes
 #%% Funtions
 def good_morning(tasker, markdown_response, sender, config):
+    print("Good Morning")
     now = datetime.datetime.now()
     week_map = {1: "一", 2: "二", 3: "三", 4: "四", 5: "五", 6:"六", 7: "日"}
     weather_info = Weather.forecast_weather_markdown(Weather.get_forecast_weather(config), False) 
