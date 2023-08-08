@@ -18,13 +18,15 @@ if __package__ is None:
     os.chdir(os.path.dirname(__file__))
     sys.path.append('..')
     import AIButlers
-    import ChatGPT
+    # import ChatGPT
     import ChatGPT3
-    import Send
+    # import Send
+    import Dingtalk
 else:
-    from . import ChatGPT
+    # from . import ChatGPT
     from . import ChatGPT3
-    from . import Send
+    # from . import Send
+    from . import Dingtalk
     from . import BaiduTranslate
     from . import Weather
     from . import Schedule
@@ -35,7 +37,8 @@ else:
 class Butler():
     def __init__(self, name, config):
         self.name = name
-        self.sender = Send.Sender(name, config)
+        # self.sender = Send.Sender(name, config)
+        self.sender = Dingtalk.Sender(name, config.to_json())
         self.config = config
         self.memory = int(config.openai.memory)
         self.init_conversation()
@@ -47,9 +50,8 @@ class Butler():
         self.tasker.run()
         Alarm.set_good_morning(self.tasker, self.markdown_response, self.sender, self.config)
 
-
     def init_conversation(self):
-        self.conversation_history = self.config.openai.init_words
+        self.conversation_history = self.config.openai.model_GPT_3.init_words
         forecast_weather = Weather.forecast_weather_text(Weather.get_forecast_weather(self.config))
         live_weather = Weather.lives_weather_text(Weather.get_lives_weather(self.config))
         self.conversation_history += live_weather
@@ -76,18 +78,17 @@ class Butler():
             self.init_conversation_gpt3()
         
     def text_response(self, reply):
-        message = utils.MyStruct()
-        message.msg_key = "sampleText"
-        message.msg_param =f'{{"content": "{reply}"}}'
+        message = dict()
+        message['msg_key'] = "sampleText"
+        message['msg_param'] =f'{{"content": "{reply}"}}'
         return message
 
     def markdown_response(self, reply, title="消息"):
-        message = utils.MyStruct()
-        message.msg_key = "sampleMarkdown"
-        message.msg_param =f'{{"title": "{title}", "text": "{reply}"}}'
+        message = dict()
+        message['msg_key'] = "sampleMarkdown"
+        message['msg_param'] =f'{{"title": "{title}", "text": "{reply}"}}'
         return message
 
-    
     def implement(self, received_message, config):
         user_id = received_message["senderStaffId"] 
         user_cname = self.config.map.user.id2cname[user_id]

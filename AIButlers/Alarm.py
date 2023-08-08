@@ -10,8 +10,6 @@
 # Basics
 import datetime
 
-# Modules
-
 # Add Path
 if __package__ is None:
     import os
@@ -20,7 +18,6 @@ if __package__ is None:
     sys.path.append("..")
     # Self-defined
     import Send
-
 else:
     from . import Send
     from . import Weather
@@ -39,15 +36,13 @@ def good_morning(tasker, markdown_response, sender, config):
     text += weather_info
 
     reply = markdown_response(text, "早安")
-    sender.send_group_message(config.dingtalk.openConversationId, reply)
+    # sender.send_group_message(config.dingtalk.openConversationId, reply)
+    sender.send_group_message(sender.get_group_id(config.dingtalk.group_name), reply)
 
 def set_good_morning(tasker, markdown_response, sender, config):
     clock = config.tasks.goodmorning
     tasker.create_day_task(good_morning, clock, tasker, markdown_response, sender, config)
 
-
-
-    
 
 #%% Main Function
 if __name__ == "__main__":

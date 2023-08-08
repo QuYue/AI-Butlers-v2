@@ -16,17 +16,16 @@ import json
 if __package__ is None:
     os.chdir(os.path.dirname(__file__))
     sys.path.append('..')
-# Self-defined
+    
 from .Butler import Butler
+# Self-defined
 import utils
+
 
 #%% Functions
 def read_config(path):
     config = utils.MyStruct()
-    with open(path, encoding="utf-8") as f:
-        d = f.read()
-        d = json.loads(d)
-        config.add_json(d)
+    config = utils.read_config(path)
 
     get_map(config)
     return config
@@ -53,7 +52,7 @@ def get_map(config):
         map.user.id2cname[uid] = ucname
 
     for robot in config.dingtalk.robots.dict:
-        robotcode = config.dingtalk.robots.dict[robot].robotCode
+        robotcode = config.dingtalk.robots.dict[robot].robot_code
         map.robot.name2code[robot] = robotcode
         map.robot.code2name[robotcode] = robot
 
@@ -62,7 +61,7 @@ def get_map(config):
 
 #%% Main Function
 if __name__ == "__main__":
-    config = read_config("../config.json")
+    config = read_config("../config.yaml")
     print(config.map.user.id2cname['manager1393'])
         
 

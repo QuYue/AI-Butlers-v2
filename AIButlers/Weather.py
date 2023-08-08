@@ -136,7 +136,7 @@ def forecast_weather_text(weather):
 
 #%% Main Function
 if __name__ == "__main__":
-    config = AIButlers.read_config("../config.json")
+    config = AIButlers.read_config("../config.yaml")
     weather = get_forecast_weather(config)
     weather_markdown = forecast_weather_text(weather)
     print(weather_markdown)

@@ -18,7 +18,7 @@ import AIButlers
 
 #%% Parameters
 arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument('-p', '--path', type=str, default="./config.json", help="The path of configure file, default:'./config.json'")
+arg_parser.add_argument('-p', '--path', type=str, default="./config.yaml", help="The path of configure file, default:'./config.yaml'")
 
 #%% Flask
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def interactive():
     senderid = received_message["senderStaffId"] 
     content = received_message["text"]["content"]
     robotcode = received_message["robotCode"]
-    utils.print(f"{sender_name}: {content}")
+    print(f"{sender_name}: {content}")
     
     butler.implement(received_message, config)    
     return "OK"
